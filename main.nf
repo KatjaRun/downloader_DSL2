@@ -118,7 +118,6 @@ if (params.wget) {
         exit 1, "wget download mode only supports accession_lists"
     }
     process download_wget {
-        executor 'local'
         maxForks params.parallel_downloads
         publishDir "${params.out_dir}", mode: params.publish_dir_mode
         errorStrategy { task.attempt <= 2 ? 'retry' : 'ignore' }
