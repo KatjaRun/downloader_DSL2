@@ -1,1 +1,1 @@
-https://github.com/nf-core/test-datasets/raw/scrnaseq/testdata/S10_L001_I1_001.fastq.gz
+https://github.com/nf-core/test-datasets/blob/1deba7b7dd7543c80185a485e01e46535a2b626e/testdata/SRR4238351_subsamp.fastq.gz
