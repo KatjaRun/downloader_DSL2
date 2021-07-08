@@ -130,7 +130,7 @@ if (params.wget) {
 
         script:
         """
-        wget "$url"
+        wget "${url.strip()}"
         """
 
     }
