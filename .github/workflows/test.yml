@@ -9,10 +9,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - uses: goanpeca/setup-miniconda@v1
+    - uses: conda-incubator/setup-miniconda@v2
+      with:
+        activate-environment: nextflow
+        channels: conda-forge,bioconda,defaults
     - name: setup
       shell: bash -l {0}
-      run: conda install --yes --quiet -c bioconda -c conda-forge nextflow procps-ng
+      run: conda install --yes --quiet nextflow procps-ng
     - name: test
       shell: bash -l {0}
       run: | 
