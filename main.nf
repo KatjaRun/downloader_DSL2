@@ -63,7 +63,7 @@ def helpMessage() {
                                     - file containing regions, one file per line
                                     or
                                     - file containing genes, one file per line
-    --gdc_bamslice_fastq        convert BAM slices to fastq (default false)
+    --gdc_fastq                 convert BAM files to fastq (default false)
     --gdc_token                 GDC access token file for protected data
     --ascp_private_key_file     Path to the aspera private key file. Defaults
                                 to \$(dirname \$(readlink -f \$(which ascp)))/../etc/asperaweb_id_dsa.openssh
@@ -259,6 +259,7 @@ if(params.gdc) {
             each gdc_file_id from gdc_uuid_list
 
             output:
+            file "**/*.bam" into gdc_bam 
             file "**/*"
 
             script:
@@ -288,6 +289,7 @@ if(params.gdc) {
             file(manifest) from gdc_manifest
 
             output:
+            file "**/*.bam" into gdc_bam 
             file "**/*"
 
             script:
@@ -303,8 +305,7 @@ if(params.gdc) {
                 gdc-client download -n  ${params.downloadConnections} -m ${manifest}
                 """
         }
-    }
-    else if(params.gdc_file_id && params.gdc_bamslice) {
+    } else if(params.gdc_file_id && params.gdc_bamslice) {
         gdc_region_list_ = file(params.gdc_bamslice)
         if (gdc_region_list_.isFile()) {
             Channel
@@ -344,7 +345,7 @@ if(params.gdc) {
             each slice from gdc_region_list
 
             output:
-            file ("${file_uuid.strip()}_${slice.strip().replaceAll(/:/, "_")}.bam") into (gdc_bamslice_out)
+            file ("${file_uuid.strip()}_${slice.strip().replaceAll(/:/, "_")}.bam") into gdc_bam 
 
             script:
             if(params.gdc_bamslice_type == "region")
@@ -372,29 +373,31 @@ if(params.gdc) {
                 """
         }
 
-        if(params.gdc_bamslice_fastq) {
-            process gdc_bamslice_fastq {
-                publishDir "${params.out_dir}", mode: params.publish_dir_mode
+      
+    }
 
-                input:
-                file bam from gdc_bamslice_out
+    if(params.gdc_fastq) {
+        process gdc_bam_to_fastq {
+            publishDir "${params.out_dir}", mode: params.publish_dir_mode
 
-                output:
-                file "*.f*q.gz"
+            input:
+            file bam from gdc_bam
 
-                script:
-                """
-                samtools sort -@ ${task.cpus/2} -n $bam | \\
-                    samtools fastq -@ ${task.cpus/2} \\
-                    -0 /dev/null \\
-                    -1 ${bam.baseName}_R1.fastq \\
-                    -2 ${bam.baseName}_R2.fastq \\
-                    -s ${bam.baseName}_singleton.fastq \\
-                    -
+            output:
+            file "*.f*q.gz"
 
-                pigz -p ${task.cpus} *.f*q
-                """
-            }
+            script:
+            """
+            samtools sort -@ ${task.cpus/2} -n $bam | \\
+                samtools fastq -@ ${task.cpus/2} \\
+                -0 /dev/null \\
+                -1 ${bam.baseName}_R1.fastq \\
+                -2 ${bam.baseName}_R2.fastq \\
+                -s ${bam.baseName}_singleton.fastq \\
+                -
+
+            pigz -p ${task.cpus} *.f*q
+            """
         }
     }
 }
