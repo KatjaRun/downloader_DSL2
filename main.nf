@@ -267,7 +267,7 @@ if(params.gdc) {
             }
             if (params.gdc_token)
                 """
-                gdc-client download -n  ${params.downloadConnections} -t ${gdc_token} ${gdc_file_id.join(" ")}
+                gdc-client download -n  ${params.downloadConnections} -t ${gdc_token} ${gdc_file_id}
                 """
             else
                 """
