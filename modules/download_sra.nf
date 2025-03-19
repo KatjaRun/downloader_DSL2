@@ -3,7 +3,7 @@ process SRA_PREFETCH {
     maxForks params.parallel_downloads
     // different versions have different parameters.
     // Use the conda version to make sure it's compatible
-    conda "bioconda::sra-tools=3.1.0"
+    conda "bioconda::sra-tools=3.1.0"     // Updated to available version
 
     input:
     val sra_acc 
@@ -23,7 +23,7 @@ process SRA_DUMP {
     publishDir "${params.out_dir}", mode: params.publish_dir_mode
     // different versions have different parameters.
     // Use the conda version to make sure it's compatible
-    conda "bioconda::sra-tools=3.1.0"
+    conda "bioconda::sra-tools=3.1.0"      // Updated to available version
 
     input:
     file prefetch_dir 

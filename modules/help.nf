@@ -15,11 +15,11 @@ def helpMessage() {
     ./main.nf --wget --out_dir="results" --accession_list="urls.txt"
 
     # Download open file from GDC
-    ./main.nf --gdc --out_dir="results" --gdc_file_id 2776a850-d9b4-4c26-8414-528458c9c7c3
+    ./main.nf --gdc --out_dir="results" --gdc_file_id 57c425f6-9625-407e-93b8-1d03858fd1f6
 
     # Download multiple open files from GDC
     ./main.nf --gdc --out_dir="results" \
-        --gdc_file_id 2776a850-d9b4-4c26-8414-528458c9c7c3,de9105ef-cd6c-4565-8526-568b5f55a47c
+        --gdc_file_id 57c425f6-9625-407e-93b8-1d03858fd1f6,00cdff29-697a-4a17-ba67-cf55c006b827
     or
     ./main.nf --gdc --out_dir="results" --gdc_file_id myGDCFileIds.txt
 
@@ -32,7 +32,7 @@ def helpMessage() {
     # Download BAM slices from GDC
     ./main.nf --gdc --out_dir="results" \
         --gdc_bamslice chr1,chr2:1000000-2000000 \
-        --gdc_file_id 82805a58-0e0c-4b29-bfae-e121236203a7 \
+        --gdc_file_id 5fd00a1f-e6cf-4d32-885b-a5a6939aedb1 \
         --gdc_token myGDCtokenFile.txt \
         --gdc_bamslice_type region
 
@@ -53,7 +53,7 @@ def helpMessage() {
     --gdc_bamslice_type         Type of BAM slice to download [region|gene] (default: region)
     --gdc_bamslice              BAM slice to download:
                                     - single region or comma separated list of regions, e.g.:
-                                        chr1,chr2:1000000-2000000,[...]
+                                        chr1,chr2:1000000-2000000,unmapped,[...]
                                     or
                                     - single gene or comma separated list of genes, e.g.:
                                         BRC1,TP53,[...]

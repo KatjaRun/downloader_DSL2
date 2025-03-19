@@ -71,6 +71,7 @@ workflow {
                 Channel
                     .value(params.gdc_file_id)
                     .tokenize(',')
+                    .flatten()
                     .set{ gdc_uuid_list }
             }
             gdc_bam = GET_GDC_FILES_BYID(gdc_uuid_list)
@@ -107,6 +108,7 @@ workflow {
                     .set{ gdc_uuid_list }
             }
             gdc_bam = GET_GDC_BAM_REGION(params.gdc_token, gdc_uuid_list, gdc_region_list)
+        
         } else if (params.gdc_manifest && params.gdc_bamslice) {
                         gdc_region_list_ = file(params.gdc_bamslice)
             if (gdc_region_list_.isFile()) {
@@ -126,7 +128,7 @@ workflow {
                                 .flatten()
                                 .map { line -> line.tokenize('\t')[0] }  
            gdc_bam = GET_GDC_BAM_REGION(params.gdc_token, gdc_uuid_list, gdc_region_list)
-        }
+        } 
         if (params.gdc_fastq) {
             GDC_BAM_TO_FASTQ(gdc_bam)
         }

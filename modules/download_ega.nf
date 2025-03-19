@@ -21,14 +21,6 @@ process GET_IDS {
         """
         pyega3 -t files $egad_identifier 2>&1 | grep -o \"EGAF[0-9]\\+\" > egaf_list.txt
         """
-    /*
-    def command = params.egaCredFile ? 
-        "pyega3 -cf ${params.egaCredFile} files $egad_identifier 2>&1 | grep -o \"EGAF[0-9]\\+\" > egaf_list.txt" :
-        "pyega3 -t files $egad_identifier 2>&1 | grep -o \"EGAF[0-9]\\+\" > egaf_list.txt"
-    """
-    ${command}
-    """
-    */
 }
 
 process DOWNLOAD_FASTQ {
