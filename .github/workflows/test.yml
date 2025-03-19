@@ -22,7 +22,7 @@ jobs:
         nextflow run main.nf --help
         nextflow run main.nf -profile conda --wget --accession_list=tests/wget.txt --out_dir="results" -c tests/test.conf
         test -f results/SRR4238351_subsamp.fastq.gz
-        nextflow run main.nf -profile conda --sra --accession_list=tests/sra.txt --out_dir="results" --cpus 6
+        nextflow run main.nf -profile conda --sra --accession_list=tests/sra.txt --out_dir="results" -c tests/test.conf --sracpus 2
         test -f results/SRR4216351.fastq.gz
         nextflow run main.nf --gdc --gdc_file_id 57c425f6-9625-407e-93b8-1d03858fd1f6,00cdff29-697a-4a17-ba67-cf55c006b827 --out_dir="results" -c tests/test.conf
         test -f results/57c425f6-9625-407e-93b8-1d03858fd1f6/576325e7-0f30-406c-9147-80e3edcf8b57.rna_seq.augmented_star_gene_counts.tsv && \
