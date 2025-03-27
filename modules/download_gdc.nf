@@ -14,17 +14,11 @@ process GET_GDC_FILES_BYID {
     file "**/*"
 
     script:
-    if (params.gdc_token) {
-        gdc_token = file(params.gdc_token)
-    }
-    if (params.gdc_token)
-        """
-        gdc-client download -n  ${params.downloadConnections} -t ${gdc_token} ${gdc_file_id}
-        """
-    else
-        """
-        gdc-client download -n  ${params.downloadConnections} ${gdc_file_id}
-        """
+    def gdc_client_opts = params.gdc_token ?  "-t " + file(params.gdc_token) : ""
+
+    """
+    gdc-client download -n  ${params.downloadConnections}  ${gdc_client_opts} ${gdc_file_id}
+    """
 }
 
 process GET_GDCFILES_BYMANIFEST {
@@ -41,17 +35,11 @@ process GET_GDCFILES_BYMANIFEST {
     file "**/*"
 
     script:
-    if (params.gdc_token) {
-        gdc_token = file(params.gdc_token)
-    }
-    if (params.gdc_token)
-        """
-        gdc-client download -n  ${params.downloadConnections} -t ${gdc_token} -m ${manifest}
-        """
-    else
-        """
-        gdc-client download -n  ${params.downloadConnections} -m ${manifest}
-        """
+    def gdc_client_opts = params.gdc_token ?  "-t " + file(params.gdc_token) : ""
+    
+    """
+    gdc-client download -n  ${params.downloadConnections}  ${gdc_client_opts} -m ${manifest}
+    """
 }
 
 process GET_GDC_BAM_REGION {

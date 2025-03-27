@@ -65,6 +65,7 @@ def helpMessage() {
     --gdc_token                 GDC access token file for protected data
     --ascp_private_key_file     Path to the aspera private key file. Defaults
                                 to \$(dirname \$(readlink -f \$(which ascp)))/../etc/asperaweb_id_dsa.openssh
+    --ascp_params               Parameters for aspera download, Default "-QT -l 1000m -P33001"
 
 
     Download-modes:

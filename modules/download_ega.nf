@@ -1,7 +1,6 @@
 process GET_IDS {
     executor 'local'
     maxForks params.parallel_downloads
-
     conda "$baseDir/envs/default.yml"
     publishDir "${params.out_dir}", mode: params.publish_dir_mode
 
@@ -13,14 +12,11 @@ process GET_IDS {
 
     script:
     // Added command to download publicly available datasets without egaCredFile
-    if (params.egaCredFile)
-        """
-        pyega3 -cf ${params.egaCredFile} files $egad_identifier 2>&1 | grep -o \"EGAF[0-9]\\+\" > egaf_list.txt
-        """
-    else
-        """
-        pyega3 -t files $egad_identifier 2>&1 | grep -o \"EGAF[0-9]\\+\" > egaf_list.txt
-        """
+    def pyega_opts = params.egaCredFile ? '-cf ' + params.egaCredFile : "-t"
+
+    """
+    pyega3 $pyega_opts files $egad_identifier 2>&1 | grep -o \"EGAF[0-9]\\+\" > egaf_list.txt
+    """
 }
 
 process DOWNLOAD_FASTQ {
@@ -35,16 +31,15 @@ process DOWNLOAD_FASTQ {
     val egaf_identifier 
 
     output:
-    file "**/*.{f*q.gz,bam}"
+    //file "**/*.{f*q.gz,bam}" // To avoid error when no fastq or bam files are downloaded
+    file "**/*" 
 
     script:
     // Added command to download publicly available datasets without egaCredFile
-    if (params.egaCredFile)
-        """
-        pyega3 -cf ${params.egaCredFile} -c ${params.downloadConnections} fetch $egaf_identifier
-        """
-    else
-        """
-        pyega3 -d -t fetch $egaf_identifier
-        """
+    script:
+    def pyega_opts = params.egaCredFile ? '-cf ' + params.egaCredFile : "-t" 
+
+    """
+    pyega3 $pyega_opts -c ${params.downloadConnections} fetch $egaf_identifier
+    """
 }

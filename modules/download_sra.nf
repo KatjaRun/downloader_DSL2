@@ -14,7 +14,9 @@ process SRA_PREFETCH {
     script:
     """
     # max size: 1TB, bash correctly handles exit code 3 and ignores it
-    prefetch --progress 1 --max-size 1024000000 ${sra_acc.strip()} || (exit_code=\$?; if [ \$exit_code -eq 3 ]; then echo "Exit code 3: Ignoring"; exit 0; else echo "Failure with exit code \$exit_code"; exit 1; fi)
+    prefetch --progress 1 --max-size 1024000000 ${sra_acc.strip()} || \\
+    (exit_code=\$?; if [ \$exit_code -eq 3 ]; then echo "Exit code 3: Ignoring"; exit 0; \\
+    else echo "Failure with exit code \$exit_code"; exit 1; fi)
     """
 
 }
